@@ -15,3 +15,13 @@ class departamento(models.Model):
     id = models.IntegerField(default=11, primary_key=True)
     nome = models.CharField(max_length=20)
     bloco = models.CharField(max_length=1)
+
+class situacao_matricula(models.Model):
+    id = models.IntegerField(default=11, primary_key=True)
+    descricao = models.CharField(max_length=15)
+
+class curso(models.Model):
+    id = models.IntegerField(default=11, primary_key=True)
+    id_dpto = models.ForeignKey(departamento, on_delete=models.CASCADE)
+    nome = models.CharField(max_length=20)
+    descricao = models.CharField(max_length=15)
