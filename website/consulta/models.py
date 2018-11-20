@@ -178,7 +178,7 @@ class Departamento(models.Model):
 class Disciplina(models.Model):
     nome = models.CharField(max_length=20, blank=True, null=True)
     id_departamento = models.ForeignKey(Departamento, models.DO_NOTHING, db_column='id_departamento')
-    id_disciplina = models.IntegerField(blank=True, null=True)
+    id_disciplina = models.IntegerField(blank=True, null=True, unique=True)
 
     class Meta:
         managed = False
