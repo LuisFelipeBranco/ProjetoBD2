@@ -1,5 +1,4 @@
-
-from django.db import models
+from django.db import models, connection
 
 
 class Aluno(models.Model):
@@ -307,3 +306,17 @@ class Turma(models.Model):
         managed = False
         db_table = 'turma'
         unique_together = (('periodo', 'id_disciplina'),)
+
+class storedProcedures(models.Model):
+    url = models.CharField(max_length=900)
+    content = models.TextField()
+    title = models.TextField()
+
+    @staticmethod
+    def search(search_string):
+        cur = connection.cursor()
+        cur.callproc('media_curso', [search_string])
+        result = cur.fetchall()
+        cur.close()
+
+        return [Document(*row) for row in results]
