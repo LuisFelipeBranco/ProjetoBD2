@@ -9,8 +9,18 @@ class AlunoDisplay(admin.ModelAdmin):
 class DepartamentoDisplay(admin.ModelAdmin):
     list_display = ('id', 'nome', 'bloco')
 
+class CursoDisplay(admin.ModelAdmin):
+    list_display = ('id', 'nome')
+
+class DisciplinaDisplay(admin.ModelAdmin):
+    list_display = ('id', 'nome')
+
+class TurmaDisplay(admin.ModelAdmin):
+    list_display = ('nome', 'periodo')
+
+
 admin.site.register(Aluno, AlunoDisplay)
 admin.site.register(Departamento, DepartamentoDisplay)
-admin.site.register(Curso)
-admin.site.register(Disciplina)
-admin.site.register(Turma)
+admin.site.register(Curso, CursoDisplay)
+admin.site.register(Disciplina, DisciplinaDisplay)
+admin.site.register(Turma, TurmaDisplay)
