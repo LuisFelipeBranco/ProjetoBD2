@@ -1,4 +1,11 @@
-from django.db import models, connection
+# This is an auto-generated Django model module.
+# You'll have to do the following manually to clean this up:
+#   * Rearrange models' order
+#   * Make sure each model has one field with primary_key=True
+#   * Make sure each ForeignKey has `on_delete` set to the desired behavior.
+#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
+# Feel free to rename the models, but don't rename db_table values or field names.
+from django.db import models
 
 
 class Aluno(models.Model):
@@ -11,8 +18,6 @@ class Aluno(models.Model):
         managed = False
         db_table = 'aluno'
 
-    def __str__(self):
-        return self.nome
 
 class AlunosTurma(models.Model):
     id_matricula = models.ForeignKey('Matricula', models.DO_NOTHING, db_column='id_matricula')
@@ -93,7 +98,7 @@ class AuthUserUserPermissions(models.Model):
 class CadeirasCurso(models.Model):
     id_curso = models.ForeignKey('Curso', models.DO_NOTHING, db_column='id_curso')
     id_disciplina = models.ForeignKey('Disciplina', models.DO_NOTHING, db_column='id_disciplina')
-    obrigatoria = models.IntegerField(blank=True, null=True)
+    obrigatoria = models.IntegerField(primary_key=True, blank=True)
 
     class Meta:
         managed = False
@@ -133,24 +138,6 @@ class ConsultaDepartamento(models.Model):
         db_table = 'consulta_departamento'
 
 
-class ConsultaSituacaoMatricula(models.Model):
-    id = models.IntegerField(primary_key=True)
-    descricao = models.CharField(max_length=15)
-
-    class Meta:
-        managed = False
-        db_table = 'consulta_situacao_matricula'
-
-
-class ConsultaTipoIngresso(models.Model):
-    id = models.IntegerField(primary_key=True)
-    tipoingresso = models.CharField(db_column='tipoIngresso', max_length=50)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'consulta_tipo_ingresso'
-
-
 class Curso(models.Model):
     nome = models.CharField(max_length=50, blank=True, null=True)
     descricao = models.CharField(max_length=50, blank=True, null=True)
@@ -177,7 +164,7 @@ class Departamento(models.Model):
 class Disciplina(models.Model):
     nome = models.CharField(max_length=20, blank=True, null=True)
     id_departamento = models.ForeignKey(Departamento, models.DO_NOTHING, db_column='id_departamento')
-    id_disciplina = models.IntegerField(blank=True, null=True, unique=True)
+    id_disciplina = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -278,6 +265,8 @@ class Professor(models.Model):
         db_table = 'professor'
         unique_together = (('id', 'cfe'),)
 
+    def __str__(self):
+        return self.nome
 
 class SituacaoMatricula(models.Model):
     descricao = models.CharField(max_length=15, blank=True, null=True)
@@ -307,16 +296,5 @@ class Turma(models.Model):
         db_table = 'turma'
         unique_together = (('periodo', 'id_disciplina'),)
 
-class storedProcedures(models.Model):
-    url = models.CharField(max_length=900)
-    content = models.TextField()
-    title = models.TextField()
-
-    @staticmethod
-    def search(search_string):
-        cur = connection.cursor()
-        cur.callproc('media_curso', [search_string])
-        result = cur.fetchall()
-        cur.close()
-
-        return [Document(*row) for row in results]
+    def __str__(self):
+        return self.nome
