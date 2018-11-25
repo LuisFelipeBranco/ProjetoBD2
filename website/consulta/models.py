@@ -1,10 +1,3 @@
-# This is an auto-generated Django model module.
-# You'll have to do the following manually to clean this up:
-#   * Rearrange models' order
-#   * Make sure each model has one field with primary_key=True
-#   * Make sure each ForeignKey has `on_delete` set to the desired behavior.
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
-# Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 
 
@@ -18,9 +11,11 @@ class Aluno(models.Model):
         managed = False
         db_table = 'aluno'
 
+    def __str__(self):
+        return self.nome
 
 class AlunosTurma(models.Model):
-    id_matricula = models.ForeignKey('Matricula', models.DO_NOTHING, db_column='id_matricula')
+    id_matricula = models.ForeignKey('Matricula', models.DO_NOTHING, db_column='id_matricula', primary_key = True)
     turma_periodo = models.ForeignKey('Turma', models.DO_NOTHING, db_column='turma_periodo', related_name='turma_periodo')
     turma_disciplina = models.ForeignKey('Turma', models.DO_NOTHING, db_column='turma_disciplina', related_name='turma_disciplina')
 
@@ -98,7 +93,7 @@ class AuthUserUserPermissions(models.Model):
 class CadeirasCurso(models.Model):
     id_curso = models.ForeignKey('Curso', models.DO_NOTHING, db_column='id_curso')
     id_disciplina = models.ForeignKey('Disciplina', models.DO_NOTHING, db_column='id_disciplina')
-    obrigatoria = models.IntegerField(primary_key=True, blank=True)
+    obrigatoria = models.BinaryField(primary_key=True, blank=True)
 
     class Meta:
         managed = False
@@ -218,6 +213,7 @@ class DjangoSession(models.Model):
 
 
 class Historico(models.Model):
+    id = models.AutoField(primary_key=True)
     id_matricula = models.ForeignKey('Matricula', models.DO_NOTHING, db_column='id_matricula')
     id_disciplina = models.ForeignKey(Disciplina, models.DO_NOTHING, db_column='id_disciplina')
     media = models.SmallIntegerField(blank=True, null=True)
@@ -238,8 +234,11 @@ class Matricula(models.Model):
         managed = False
         db_table = 'matricula'
 
+    def __str__(self):
+        return self.id_aluno
 
 class NotaAluno(models.Model):
+    id = models.IntegerField(primary_key=True)
     id_matricula = models.ForeignKey(Matricula, models.DO_NOTHING, db_column='id_matricula')
     id_professor = models.ForeignKey('Professor', models.DO_NOTHING, db_column='id_professor')
     id_disciplina = models.ForeignKey(Disciplina, models.DO_NOTHING, db_column='id_disciplina')
