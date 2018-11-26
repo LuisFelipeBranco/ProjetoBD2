@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Aluno, Departamento, AlunosTurma, CadeirasCurso, Curso, Disciplina, Historico, Matricula, NotaAluno,Professor, SituacaoMatricula, TipoIngresso, Turma
+from .models import Aluno, Departamento, AlunosTurma, CadeirasCurso, Curso, Disciplina, Historico, Matricula, NotaAluno, Professor, SituacaoMatricula, TipoIngresso, Turma
 
 class AlunoDisplay(admin.ModelAdmin):
     list_display = ('id', 'nome', 'email')
@@ -35,7 +35,8 @@ class NotaAlunoDisplay(admin.ModelAdmin):
 class HistoricoDisplay(admin.ModelAdmin):
     list_display = ('id_matricula', 'id_disciplina')
 
-
+class CadeirasCursoDisplay(admin.ModelAdmin):
+    list_display = ('id_curso', 'id_disciplina', 'obrigatoria')
 
 admin.site.register(Aluno, AlunoDisplay)
 admin.site.register(Departamento, DepartamentoDisplay)
@@ -47,6 +48,6 @@ admin.site.register(AlunosTurma, AlunosTurmasDisplay)
 admin.site.register(Matricula, MatriculaDisplay)
 admin.site.register(NotaAluno, NotaAlunoDisplay)
 admin.site.register(Historico, HistoricoDisplay)
-admin.site.register(CadeirasCurso)
+admin.site.register(CadeirasCurso, CadeirasCursoDisplay)
 admin.site.register(SituacaoMatricula)
 admin.site.register(TipoIngresso)

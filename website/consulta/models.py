@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, connection
 
 
 class Aluno(models.Model):
@@ -234,11 +234,9 @@ class Matricula(models.Model):
         managed = False
         db_table = 'matricula'
 
-    def __str__(self):
-        return self.id_aluno
 
 class NotaAluno(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     id_matricula = models.ForeignKey(Matricula, models.DO_NOTHING, db_column='id_matricula')
     id_professor = models.ForeignKey('Professor', models.DO_NOTHING, db_column='id_professor')
     id_disciplina = models.ForeignKey(Disciplina, models.DO_NOTHING, db_column='id_disciplina')
@@ -250,6 +248,14 @@ class NotaAluno(models.Model):
         managed = False
         db_table = 'nota_aluno'
 
+    def consultaNotas(self):
+        cursor = connection.cursor()
+        cursor.execute(''' select (*) from NotaAluno''')
+        row = cursor.fetchone()
+        print(row)
+
+    def __str__(self):
+        return self.id
 
 class Professor(models.Model):
     nome = models.CharField(max_length=50)
@@ -282,6 +288,8 @@ class TipoIngresso(models.Model):
         managed = False
         db_table = 'tipo_ingresso'
 
+    def __str__(self):
+        return self.tipoingresso
 
 class Turma(models.Model):
     periodo = models.SmallIntegerField(primary_key=True)
