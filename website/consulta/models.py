@@ -93,12 +93,23 @@ class AuthUserUserPermissions(models.Model):
 class CadeirasCurso(models.Model):
     id_curso = models.ForeignKey('Curso', models.DO_NOTHING, db_column='id_curso')
     id_disciplina = models.ForeignKey('Disciplina', models.DO_NOTHING, db_column='id_disciplina')
-    obrigatoria = models.BinaryField(primary_key=True, blank=True)
+    OPTIONS_CHOICES = (
+        ('0', 'V'),
+        ('1', 'F'),
+    )
+    obrigatoria = models.SmallIntegerField()
 
     class Meta:
         managed = False
         db_table = 'cadeiras_curso'
 
+    @staticmethod
+    def checar_obrigatoria(search_string):
+        cur = connection.cursor()
+        cur.callproc('curso_obrigatorias', [id])
+        results = cur.fetchall()
+        cur.close()
+        return [CadeirasCurso(*row) for row in results]
 
 class ConsultaAluno(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -234,7 +245,6 @@ class Matricula(models.Model):
         managed = False
         db_table = 'matricula'
 
-
 class NotaAluno(models.Model):
     id = models.AutoField(primary_key=True)
     id_matricula = models.ForeignKey(Matricula, models.DO_NOTHING, db_column='id_matricula')
@@ -248,14 +258,8 @@ class NotaAluno(models.Model):
         managed = False
         db_table = 'nota_aluno'
 
-    def consultaNotas(self):
-        cursor = connection.cursor()
-        cursor.execute(''' select (*) from NotaAluno''')
-        row = cursor.fetchone()
-        print(row)
-
     def __str__(self):
-        return self.id
+        return '%s' % (self.id_matricula)
 
 class Professor(models.Model):
     nome = models.CharField(max_length=50)
@@ -280,6 +284,8 @@ class SituacaoMatricula(models.Model):
         managed = False
         db_table = 'situacao_matricula'
 
+    def __str__(self):
+        return self.descricao
 
 class TipoIngresso(models.Model):
     tipoingresso = models.CharField(db_column='tipoIngresso', max_length=20, blank=True, null=True)  # Field name made lowercase.
